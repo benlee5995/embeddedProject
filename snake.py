@@ -54,39 +54,39 @@ class App(QWidget):
 
         startButton.move(10,10)
         resetButton.move(10,50)
-        b00.move(300,350)
-        b01.move(300,250)
-        b02.move(300,150)
-        b03.move(300,50)
-        b10.move(400,350)
-        b11.move(400,250)
-        b12.move(400,150)
-        b13.move(400,50)
-        b20.move(500,350)
-        b21.move(500,250)
-        b22.move(500,150)
-        b23.move(500,50)
-        b30.move(600,350)
-        b31.move(600,250)
-        b32.move(600,150)
-        b33.move(600,50)
+        b00.move(300,50)
+        b01.move(400,50)
+        b02.move(500,50)
+        b03.move(600,50)
+        b10.move(300,150)
+        b11.move(400,150)
+        b12.move(500,150)
+        b13.move(600,150)
+        b20.move(300,250)
+        b21.move(400,250)
+        b22.move(500,250)
+        b23.move(600,250)
+        b30.move(300,350)
+        b31.move(400,350)
+        b32.move(500,350)
+        b33.move(600,350)
 
-        b00.resize(15,15)
-        b01.resize(15,15)
-        b02.resize(15,15)
-        b03.resize(15,15)
-        b10.resize(15,15)
-        b11.resize(15,15)
-        b12.resize(15,15)
-        b13.resize(15,15)
-        b20.resize(15,15)
-        b21.resize(15,15)
-        b22.resize(15,15)
-        b23.resize(15,15)
-        b30.resize(15,15)
-        b31.resize(15,15)
-        b32.resize(15,15)
-        b33.resize(15,15)
+        b00.resize(25,25)
+        b01.resize(25,25)
+        b02.resize(25,25)
+        b03.resize(25,25)
+        b10.resize(25,25)
+        b11.resize(25,25)
+        b12.resize(25,25)
+        b13.resize(25,25)
+        b20.resize(25,25)
+        b21.resize(25,25)
+        b22.resize(25,25)
+        b23.resize(25,25)
+        b30.resize(25,25)
+        b31.resize(25,25)
+        b32.resize(25,25)
+        b33.resize(25,25)
 
         b00.setStyleSheet('QPushButton{color: white}')
         b01.setStyleSheet('QPushButton{color: white}')
@@ -135,16 +135,17 @@ class App(QWidget):
         self.setWindowTitle('Snake Team1')
         self.setGeometry(10, 10, 800, 500)
 
-        self.x = 300
-        self.y = 350
-        self.lastMove = 'RIGHT'
+        self.x = 400
+        self.y = 150
+        self.lastMove = ['LEFT', 'UP', 'RIGHT', 'DOWN', 'LEFT']
         self.timer = QBasicTimer()
-        self.snakeArray = [[self.x, self.y], [self.x-12, self.y], [self.x-24, self.y]]
+        self.snakeArray = [[self.x, self.y], [self.x+ 25, self.y], [self.x + 50, self.y], [self.x + 75, self.y], [self.x + 100, self.y]]
         self.foodx = 0
         self.foody = 0
         self.isPaused = False
         self.isOver = False
-        self.speed = 500
+        self.speed = 800
+        self.nodeCheck = False
         
         self.initButtons()
         self.initStats()
@@ -169,21 +170,20 @@ class App(QWidget):
 
     def movement(self, move):
         self.snakeArray.pop()
-        if(move == "UP"):
-            print('up')
-            self.y -= 12
+        if(move[0] == "UP"):
+            self.y -= 25
             self.repaint()
             self.snakeArray.insert(0,[self.x, self.y])
-        elif (move == "DOWN"):
-            self.y += 12
+        elif (move[0] == "DOWN"):
+            self.y += 25
             self.repaint()
             self.snakeArray.insert(0,[self.x, self.y])
-        elif (move == "LEFT"):
-            self.x -= 12
+        elif (move[0] == "LEFT"):
+            self.x -= 25
             self.repaint()
             self.snakeArray.insert(0,[self.x, self.y])
-        elif (move == "RIGHT"):
-            self.x += 12
+        elif (move[0] == "RIGHT"):
+            self.x += 25
             self.repaint()
             self.snakeArray.insert(0,[self.x, self.y])
 
@@ -191,15 +191,50 @@ class App(QWidget):
         qp.setPen(Qt.NoPen)
         qp.setBrush(QColor(255, 80, 0, 255))
         for i in self.snakeArray:
-            qp.drawRect(i[0], i[1], 12, 12)
+            qp.drawRect(i[0], i[1], 25, 25)
 
     def timerEvent(self, event):
         if event.timerId() == self.timer.timerId():
-            self.movement(self.lastMove)
-            self.repaint()
+            if(self.nodeCheck == False):
+                self.tempx = self.x
+                self.tempy = self.y
+                self.nodeCheck = True
+            if(len(self.lastMove) != 0):
+                if(self.lastMove[0] == 'LEFT'):
+                    if(self.x == (self.tempx - 100)):
+                        if(len(self.lastMove) != 0):
+                            self.lastMove.pop(0)
+                            self.nodeCheck = False
+                    else:
+                        self.movement(self.lastMove)
+                        self.repaint()
+                elif(self.lastMove[0] == 'RIGHT'):
+                    if(self.x == (self.tempx + 100)):
+                        if(len(self.lastMove) != 0):
+                            self.lastMove.pop(0)
+                            self.nodeCheck = False
+                    else:
+                        self.movement(self.lastMove)
+                        self.repaint()
+                elif(self.lastMove[0] == 'UP'):
+                    if(self.y == (self.tempy - 100)):
+                        if(len(self.lastMove) != 0):
+                            self.lastMove.pop(0)
+                            self.nodeCheck = False
+                    else:
+                        self.movement(self.lastMove)
+                        self.repaint()
+                elif(self.lastMove[0] == 'DOWN'):
+                    if(self.y == (self.tempy + 100)):
+                        if(len(self.lastMove) != 0):
+                            self.lastMove.pop(0)
+                            self.nodeCheck = False
+                    else:
+                        self.movement(self.lastMove)
+                        self.repaint()
         else:
             QFrame.timerEvent(self, event)
-            
+    
     @pyqtSlot()
     def on_click(self):
         print('onclick')
