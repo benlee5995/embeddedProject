@@ -32,104 +32,111 @@ class App(QWidget):
         mySignal.connect(self.dataReceive)
 
     def initButtons(self):
-        startButton = QPushButton('Start', self) 
-        resetButton = QPushButton('Reset', self)
+        if(self.isReset == False):
+            self.startButton = QPushButton('Start', self) 
+            self.resetButton = QPushButton('Reset', self)
 
-        b00 = QPushButton('b00', self)
-        b01 = QPushButton('b01', self)
-        b02 = QPushButton('b02', self)
-        b03 = QPushButton('b03', self)
-        b10 = QPushButton('b10', self)
-        b11 = QPushButton('b11', self)
-        b12 = QPushButton('b12', self)
-        b13 = QPushButton('b13', self)
-        b20 = QPushButton('b20', self)
-        b21 = QPushButton('b21', self)
-        b22 = QPushButton('b22', self)
-        b23 = QPushButton('b23', self)
-        b30 = QPushButton('b30', self)
-        b31 = QPushButton('b31', self)
-        b32 = QPushButton('b32', self)
-        b33 = QPushButton('b33', self)
+            self.b00 = QPushButton('b00', self)
+            self.b01 = QPushButton('b01', self)
+            self.b02 = QPushButton('b02', self)
+            self.b03 = QPushButton('b03', self)
+            self.b10 = QPushButton('b10', self)
+            self.b11 = QPushButton('b11', self)
+            self.b12 = QPushButton('b12', self)
+            self.b13 = QPushButton('b13', self)
+            self.b20 = QPushButton('b20', self)
+            self.b21 = QPushButton('b21', self)
+            self.b22 = QPushButton('b22', self)
+            self.b23 = QPushButton('b23', self)
+            self.b30 = QPushButton('b30', self)
+            self.b31 = QPushButton('b31', self)
+            self.b32 = QPushButton('b32', self)
+            self.b33 = QPushButton('b33', self)
 
-        startButton.move(10,10)
-        resetButton.move(10,50)
-        b00.move(300,50)
-        b01.move(400,50)
-        b02.move(500,50)
-        b03.move(600,50)
-        b10.move(300,150)
-        b11.move(400,150)
-        b12.move(500,150)
-        b13.move(600,150)
-        b20.move(300,250)
-        b21.move(400,250)
-        b22.move(500,250)
-        b23.move(600,250)
-        b30.move(300,350)
-        b31.move(400,350)
-        b32.move(500,350)
-        b33.move(600,350)
+            self.startButton.move(10,10)
+            self.resetButton.move(10,50)
+            self.b00.move(300,50)
+            self.b01.move(400,50)
+            self.b02.move(500,50)
+            self.b03.move(600,50)
+            self.b10.move(300,150)
+            self.b11.move(400,150)
+            self.b12.move(500,150)
+            self.b13.move(600,150)
+            self.b20.move(300,250)
+            self.b21.move(400,250)
+            self.b22.move(500,250)
+            self.b23.move(600,250)
+            self.b30.move(300,350)
+            self.b31.move(400,350)
+            self.b32.move(500,350)
+            self.b33.move(600,350)
 
-        b00.resize(25,25)
-        b01.resize(25,25)
-        b02.resize(25,25)
-        b03.resize(25,25)
-        b10.resize(25,25)
-        b11.resize(25,25)
-        b12.resize(25,25)
-        b13.resize(25,25)
-        b20.resize(25,25)
-        b21.resize(25,25)
-        b22.resize(25,25)
-        b23.resize(25,25)
-        b30.resize(25,25)
-        b31.resize(25,25)
-        b32.resize(25,25)
-        b33.resize(25,25)
+            self.b00.resize(25,25)
+            self.b01.resize(25,25)
+            self.b02.resize(25,25)
+            self.b03.resize(25,25)
+            self.b10.resize(25,25)
+            self.b11.resize(25,25)
+            self.b12.resize(25,25)
+            self.b13.resize(25,25)
+            self.b20.resize(25,25)
+            self.b21.resize(25,25)
+            self.b22.resize(25,25)
+            self.b23.resize(25,25)
+            self.b30.resize(25,25)
+            self.b31.resize(25,25)
+            self.b32.resize(25,25)
+            self.b33.resize(25,25)
 
-        b00.setStyleSheet('QPushButton{color: white}')
-        b01.setStyleSheet('QPushButton{color: white}')
-        b02.setStyleSheet('QPushButton{color: white}')
-        b03.setStyleSheet('QPushButton{color: white}')
-        b10.setStyleSheet('QPushButton{color: white}')
-        b11.setStyleSheet('QPushButton{color: white}')
-        b12.setStyleSheet('QPushButton{color: white}')
-        b13.setStyleSheet('QPushButton{color: white}')
-        b20.setStyleSheet('QPushButton{color: white}')
-        b21.setStyleSheet('QPushButton{color: white}')
-        b22.setStyleSheet('QPushButton{color: white}')
-        b23.setStyleSheet('QPushButton{color: white}')
-        b30.setStyleSheet('QPushButton{color: white}')
-        b31.setStyleSheet('QPushButton{color: white}')
-        b32.setStyleSheet('QPushButton{color: white}')
-        b33.setStyleSheet('QPushButton{color: white}')
+            self.startButton.clicked.connect(self.on_click)
+            self.resetButton.clicked.connect(self.on_click)
+            self.b00.clicked.connect(self.on_click)
+            self.b01.clicked.connect(self.on_click)
+            self.b02.clicked.connect(self.on_click)
+            self.b03.clicked.connect(self.on_click)
+            self.b10.clicked.connect(self.on_click)
+            self.b11.clicked.connect(self.on_click)
+            self.b12.clicked.connect(self.on_click)
+            self.b13.clicked.connect(self.on_click)
+            self.b20.clicked.connect(self.on_click)
+            self.b21.clicked.connect(self.on_click)
+            self.b22.clicked.connect(self.on_click)
+            self.b23.clicked.connect(self.on_click)
+            self.b30.clicked.connect(self.on_click)
+            self.b31.clicked.connect(self.on_click)
+            self.b32.clicked.connect(self.on_click)
+            self.b33.clicked.connect(self.on_click)
 
-        startButton.clicked.connect(self.on_click)
-        resetButton.clicked.connect(self.on_click)
-        b00.clicked.connect(self.on_click)
-        b01.clicked.connect(self.on_click)
-        b02.clicked.connect(self.on_click)
-        b03.clicked.connect(self.on_click)
-        b10.clicked.connect(self.on_click)
-        b11.clicked.connect(self.on_click)
-        b12.clicked.connect(self.on_click)
-        b13.clicked.connect(self.on_click)
-        b20.clicked.connect(self.on_click)
-        b21.clicked.connect(self.on_click)
-        b22.clicked.connect(self.on_click)
-        b23.clicked.connect(self.on_click)
-        b30.clicked.connect(self.on_click)
-        b31.clicked.connect(self.on_click)
-        b32.clicked.connect(self.on_click)
-        b33.clicked.connect(self.on_click)
-
+        self.b00.setStyleSheet('background-color: white; color: white}')
+        self.b01.setStyleSheet('background-color: white; color: white}')
+        self.b02.setStyleSheet('background-color: white; color: white}')
+        self.b03.setStyleSheet('background-color: white; color: white}')
+        self.b10.setStyleSheet('background-color: white; color: white}')
+        self.b11.setStyleSheet('background-color: white; color: white}')
+        self.b12.setStyleSheet('background-color: white; color: white}')
+        self.b13.setStyleSheet('background-color: white; color: white}')
+        self.b20.setStyleSheet('background-color: white; color: white}')
+        self.b21.setStyleSheet('background-color: white; color: white}')
+        self.b22.setStyleSheet('background-color: white; color: white}')
+        self.b23.setStyleSheet('background-color: white; color: white}')
+        self.b30.setStyleSheet('background-color: white; color: white}')
+        self.b31.setStyleSheet('background-color: white; color: white}')
+        self.b32.setStyleSheet('background-color: white; color: white}')
+        self.b33.setStyleSheet('background-color: white; color: white}')
 
     def initStats(self):
-        self.stats = QLineEdit(self)
+        if(self.isReset == False):
+            self.stats = QLineEdit(self)
+            self.status = QLineEdit(self)
+            self.stats.move(10, 90)
+            self.stats.resize(100, 300)
+            self.status.move(300, 10)
+            self.status.resize(300, 30)
+            self.status.setEnabled(False)
+
+        self.status.setText("Press Start to Play")
         self.stats.setText("stats")
-        self.stats.move(10, 90)
-        self.stats.resize(100, 300)
  
     def initUI(self):
         self.setWindowTitle('Snake Team1')
@@ -137,7 +144,7 @@ class App(QWidget):
 
         self.x = 400
         self.y = 150
-        self.lastMove = ['LEFT', 'UP', 'RIGHT', 'DOWN', 'LEFT']
+        self.lastMove = ['LEFT', 'UP']
         self.timer = QBasicTimer()
         self.snakeArray = [[self.x, self.y], [self.x+ 25, self.y], [self.x + 50, self.y], [self.x + 75, self.y], [self.x + 100, self.y]]
         self.foodx = 0
@@ -146,16 +153,44 @@ class App(QWidget):
         self.isOver = False
         self.speed = 800
         self.nodeCheck = False
+        self.isPaused = True
+        self.isStart = False
+        self.isFood = False
+        self.isReset = False
         
         self.initButtons()
         self.initStats()
 
         self.show()
 
-    def start(self):
+    def resetUI(self):
+        self.x = 400
+        self.y = 150
+        self.lastMove = ['LEFT', 'UP']
+        self.timer = QBasicTimer()
+        self.snakeArray = [[self.x, self.y], [self.x+ 25, self.y], [self.x + 50, self.y], [self.x + 75, self.y], [self.x + 100, self.y]]
+        self.foodx = 0
+        self.foody = 0
         self.isPaused = False
-        self.timer.start(self.speed, self)
+        self.isOver = False
+        self.speed = 800
+        self.nodeCheck = False
+        self.isPaused = True
+        self.isStart = False
+        self.isFood = False
+        self.isReset = True
+
+        self.initButtons()
+        self.initStats()
+
         self.update()
+
+    def start(self):
+        if(self.isStart == False):
+            self.startButton.isEnabled = False
+            self.isStart = True
+            self.timer.start(self.speed, self)
+            self.update()
 
     def pause(self):
         self.isPaused = True
@@ -189,49 +224,53 @@ class App(QWidget):
 
     def drawSnake(self, qp):
         qp.setPen(Qt.NoPen)
-        qp.setBrush(QColor(255, 80, 0, 255))
+        qp.setBrush(QColor(Qt.green))
         for i in self.snakeArray:
             qp.drawRect(i[0], i[1], 25, 25)
 
     def timerEvent(self, event):
         if event.timerId() == self.timer.timerId():
-            if(self.nodeCheck == False):
-                self.tempx = self.x
-                self.tempy = self.y
-                self.nodeCheck = True
-            if(len(self.lastMove) != 0):
-                if(self.lastMove[0] == 'LEFT'):
-                    if(self.x == (self.tempx - 100)):
-                        if(len(self.lastMove) != 0):
-                            self.lastMove.pop(0)
-                            self.nodeCheck = False
-                    else:
-                        self.movement(self.lastMove)
-                        self.repaint()
-                elif(self.lastMove[0] == 'RIGHT'):
-                    if(self.x == (self.tempx + 100)):
-                        if(len(self.lastMove) != 0):
-                            self.lastMove.pop(0)
-                            self.nodeCheck = False
-                    else:
-                        self.movement(self.lastMove)
-                        self.repaint()
-                elif(self.lastMove[0] == 'UP'):
-                    if(self.y == (self.tempy - 100)):
-                        if(len(self.lastMove) != 0):
-                            self.lastMove.pop(0)
-                            self.nodeCheck = False
-                    else:
-                        self.movement(self.lastMove)
-                        self.repaint()
-                elif(self.lastMove[0] == 'DOWN'):
-                    if(self.y == (self.tempy + 100)):
-                        if(len(self.lastMove) != 0):
-                            self.lastMove.pop(0)
-                            self.nodeCheck = False
-                    else:
-                        self.movement(self.lastMove)
-                        self.repaint()
+            if(self.isFood == False):
+                self.status.setText("Place food at an intersection")
+            if(self.isPaused == False):
+                self.status.setText("Game is in play")
+                if(self.nodeCheck == False):
+                    self.tempx = self.x
+                    self.tempy = self.y
+                    self.nodeCheck = True
+                if(len(self.lastMove) != 0):
+                    if(self.lastMove[0] == 'LEFT'):
+                        if(self.x == (self.tempx - 100)):
+                            if(len(self.lastMove) != 0):
+                                self.lastMove.pop(0)
+                                self.nodeCheck = False
+                        else:
+                            self.movement(self.lastMove)
+                            self.repaint()
+                    elif(self.lastMove[0] == 'RIGHT'):
+                        if(self.x == (self.tempx + 100)):
+                            if(len(self.lastMove) != 0):
+                                self.lastMove.pop(0)
+                                self.nodeCheck = False
+                        else:
+                            self.movement(self.lastMove)
+                            self.repaint()
+                    elif(self.lastMove[0] == 'UP'):
+                        if(self.y == (self.tempy - 100)):
+                            if(len(self.lastMove) != 0):
+                                self.lastMove.pop(0)
+                                self.nodeCheck = False
+                        else:
+                            self.movement(self.lastMove)
+                            self.repaint()
+                    elif(self.lastMove[0] == 'DOWN'):
+                        if(self.y == (self.tempy + 100)):
+                            if(len(self.lastMove) != 0):
+                                self.lastMove.pop(0)
+                                self.nodeCheck = False
+                        else:
+                            self.movement(self.lastMove)
+                            self.repaint()
         else:
             QFrame.timerEvent(self, event)
     
@@ -245,61 +284,121 @@ class App(QWidget):
             # start game
             self.start()
         elif self.sender().text() == 'Reset':
+            self.isPaused = True
             self.handler.uiData = 'R'
             self.handler.isUIData = True
-        elif self.sender().text() == 'b00':
-            print('00')
-            self.handler.uiData = '00'
-            self.handler.isUIData = True
-        elif self.sender().text() == 'b01':
-            self.handler.uiData = '01'
-            self.handler.isUIData = True
-        elif self.sender().text() == 'b02':
-            self.handler.uiData = '02'
-            self.handler.isUIData = True
-        elif self.sender().text() == 'b03':
-            self.handler.uiData = '03'
-            self.handler.isUIData = True
-        elif self.sender().text() == 'b10':
-            self.handler.uiData = '10'
-            self.handler.isUIData = True
-        elif self.sender().text() == 'b11':
-            self.handler.uiData = '11'
-            self.handler.isUIData = True
-        elif self.sender().text() == 'b12':
-            self.handler.uiData = '12'
-            self.handler.isUIData = True
-        elif self.sender().text() == 'b13':
-            self.handler.uiData = '13'
-            self.handler.isUIData = True
-        elif self.sender().text() == 'b20':
-            self.handler.uiData = '20'
-            self.handler.isUIData = True
-        elif self.sender().text() == 'b21':
-            self.handler.uiData = '21'
-            self.handler.isUIData = True
-        elif self.sender().text() == 'b22':
-            self.handler.uiData = '22'
-            self.handler.isUIData = True
-        elif self.sender().text() == 'b23':
-            self.handler.uiData = '23'
-            self.handler.isUIData = True
-        elif self.sender().text() == 'b30':
-            self.handler.uiData = '30'
-            self.handler.isUIData = True
-        elif self.sender().text() == 'b31':
-            self.handler.uiData = '31'
-            self.handler.isUIData = True
-        elif self.sender().text() == 'b32':
-            self.handler.uiData = '32'
-            self.handler.isUIData = True
-        elif self.sender().text() == 'b33':
-            self.handler.uiData = '33'
-            self.handler.isUIData = True
-            
+            self.resetUI()
+        if(self.isStart == True and self.isFood == False) and self.isPaused == True:
+            if self.sender().text() == 'b00':
+                self.handler.uiData = '00'
+                self.handler.isUIData = True
+                self.b00.setStyleSheet('background-color: red; color: red}')
+                self.isFood = True
+                self.isPaused = False
+            elif self.sender().text() == 'b01':
+                self.handler.uiData = '01'
+                self.handler.isUIData = True
+                self.b01.setStyleSheet('background-color: red; color: red}')
+                self.isFood = True
+                self.isPaused = False
+            elif self.sender().text() == 'b02':
+                self.handler.uiData = '02'
+                self.handler.isUIData = True
+                self.b02.setStyleSheet('background-color: red; color: red}')
+                self.isFood = True
+                self.isPaused = False
+            elif self.sender().text() == 'b03':
+                self.handler.uiData = '03'
+                self.handler.isUIData = True
+                self.b03.setStyleSheet('background-color: red; color: red}')
+                self.isFood = True
+                self.isPaused = False
+            elif self.sender().text() == 'b10':
+                self.handler.uiData = '10'
+                self.handler.isUIData = True
+                self.b10.setStyleSheet('background-color: red; color: red}')
+                self.isFood = True
+                self.isPaused = False
+            elif self.sender().text() == 'b11':
+                self.handler.uiData = '11'
+                self.handler.isUIData = True
+                self.b11.setStyleSheet('background-color: red; color: red}')
+                self.isFood = True
+                self.isPaused = False
+            elif self.sender().text() == 'b12':
+                self.handler.uiData = '12'
+                self.handler.isUIData = True
+                self.b12.setStyleSheet('background-color: red; color: red}')
+                self.isFood = True
+                self.isPaused = False
+            elif self.sender().text() == 'b13':
+                self.handler.uiData = '13'
+                self.handler.isUIData = True
+                self.b13.setStyleSheet('background-color: red; color: red}')
+                self.isFood = True
+                self.isPaused = False
+            elif self.sender().text() == 'b20':
+                self.handler.uiData = '20'
+                self.handler.isUIData = True
+                self.b20.setStyleSheet('background-color: red; color: red}')
+                self.isFood = True
+                self.isPaused = False
+            elif self.sender().text() == 'b21':
+                self.handler.uiData = '21'
+                self.handler.isUIData = True
+                self.b21.setStyleSheet('background-color: red; color: red}')
+                self.isFood = True
+                self.isPaused = False
+            elif self.sender().text() == 'b22':
+                self.handler.uiData = '22'
+                self.handler.isUIData = True
+                self.b22.setStyleSheet('background-color: red; color: red}')
+                self.isFood = True
+                self.isPaused = False
+            elif self.sender().text() == 'b23':
+                self.handler.uiData = '23'
+                self.handler.isUIData = True
+                self.b23.setStyleSheet('background-color: red; color: red}')
+                self.isFood = True
+                self.isPaused = False
+            elif self.sender().text() == 'b30':
+                self.handler.uiData = '30'
+                self.handler.isUIData = True
+                self.b30.setStyleSheet('background-color: red; color: red}')
+                self.isFood = True
+                self.isPaused = False
+            elif self.sender().text() == 'b31':
+                self.handler.uiData = '31'
+                self.handler.isUIData = True
+                self.b31.setStyleSheet('background-color: red; color: red}')
+                self.isFood = True
+                self.isPaused = False
+            elif self.sender().text() == 'b32':
+                self.handler.uiData = '32'
+                self.handler.isUIData = True
+                self.b32.setStyleSheet('background-color: red; color: red}')
+                self.isFood = True
+                self.isPaused = False
+            elif self.sender().text() == 'b33':
+                self.handler.uiData = '33'
+                self.handler.isUIData = True
+                self.b33.setStyleSheet('background-color: red; color: red}')
+                self.isFood = True
+                self.isPaused = False
+                
     @pyqtSlot(str)
     def dataReceive(self, letter):
         self.stats.setText(letter)
+        if(letter == 'l'):
+            self.lastMove.append('LEFT')
+        elif(letter == 'u'):
+            self.lastMove.append('UP')
+        elif(letter == 'd'):
+            self.lastMove.append('DOWN')
+        elif(letter == 'r'):
+            self.lastMove.append('RIGHT')
+        elif(letter == 'p'):
+            self.isPaused = True
         
 if __name__ == '__main__':
     app = QApplication(sys.argv)
