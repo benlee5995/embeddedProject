@@ -35,6 +35,8 @@ class App(QWidget):
         if(self.isReset == False):
             self.startButton = QPushButton('Start', self) 
             self.resetButton = QPushButton('Reset', self)
+            self.startButton.clicked.connect(self.on_click)
+            self.resetButton.clicked.connect(self.on_click)
 
             self.b00 = QPushButton('b00', self)
             self.b01 = QPushButton('b01', self)
@@ -93,15 +95,11 @@ class App(QWidget):
             for button in self.buttonGroup.buttons():
                 button.resize(25,25)
                 button.clicked.connect(self.on_click)
-                button.setStyleSheet('background-color: white; color: white}')
-
-            self.b11.setStyleSheet('background-color: green; color: green}')
-            self.b12.setStyleSheet('background-color: green; color: green}')
-
-            self.startButton.clicked.connect(self.on_click)
-            self.resetButton.clicked.connect(self.on_click)
-
-        #for button in self.buttonGroup.buttons():
+                
+        for button in self.buttonGroup.buttons():
+            button.setStyleSheet('background-color: white; color: white}')
+        self.b11.setStyleSheet('background-color: green; color: green}')
+        self.b12.setStyleSheet('background-color: green; color: green}')
 
     def initStats(self):
         if(self.isReset == False):
@@ -120,28 +118,9 @@ class App(QWidget):
     def initUI(self):
         self.setWindowTitle('Snake Team1')
         self.setGeometry(10, 10, 800, 500)
-
-        self.x = 400
-        self.y = 150
-        self.lastMove = ['LEFT', 'UP']
-        self.timer = QBasicTimer()
-        self.snakeArray = [[self.x, self.y], [self.x+ 25, self.y], [self.x + 50, self.y], [self.x + 75, self.y], [self.x + 100, self.y]]
-        self.foodx = 0
-        self.foody = 0
-        self.isPaused = False
-        self.isOver = False
-        self.speed = 800
-        self.nodeCheck = False
-        self.isPaused = True
-        self.isStart = False
-        self.isFood = False
         self.isReset = False
-        self.isEat = False
-        self.bodyLength = 100
-        
-        self.initButtons()
-        self.initStats()
-
+        self.resetUI()
+        self.isReset = True
         self.show()
 
     def resetUI(self):
@@ -149,19 +128,24 @@ class App(QWidget):
         self.y = 150
         self.lastMove = ['LEFT', 'UP']
         self.timer = QBasicTimer()
-        self.snakeArray = [[self.x, self.y], [self.x+ 25, self.y], [self.x + 50, self.y], [self.x + 75, self.y], [self.x + 100, self.y]]
+        self.bodyLength = 100
+        self.foodEaten = 0
+        self.snakeArray = [[self.x, self.y],
+                           [self.x+ 25, self.y],
+                           [self.x + 50, self.y],
+                           [self.x + 75, self.y],
+                           [self.x + 100, self.y]]
         self.foodx = 0
         self.foody = 0
         self.isPaused = False
         self.isOver = False
-        self.speed = 800
+        self.speed = 400
         self.nodeCheck = False
         self.isPaused = True
         self.isStart = False
         self.isFood = False
-        self.isReset = True
         self.isEat = False
-        self.bodyLength = 100
+        self.isGrow = False
 
         self.initButtons()
         self.initStats()
@@ -186,7 +170,13 @@ class App(QWidget):
         self.drawSnake(qp)
 
     def movement(self, move):
-        self.snakeArray.pop()
+        if(self.isGrow == True):    # handle snake body growth/deletion
+            if(self.count == 3):
+                self.isGrow = False
+            else:
+                self.count += 1
+        else:     
+            self.snakeArray.pop()
         if(move[0] == "UP"):
             self.y -= 25
             self.repaint()
@@ -206,7 +196,6 @@ class App(QWidget):
 
     def drawSnake(self, qp):
         qp.setPen(Qt.NoPen)
-        #qp.setBrush(QColor(Qt.green))
         qp.setBrush(QColor(Qt.darkGreen))
         for i in self.snakeArray:
             qp.drawRect(i[0], i[1], 25, 25)
@@ -228,6 +217,9 @@ class App(QWidget):
         self.status.setText("Food was eaten")
         self.isPaused = True
         self.isFood = False
+        self.isGrow = True
+        self.count = 0
+        #self.snakeArray.append([self.x + 125, self.y])
 
     def timerEvent(self, event):
         if event.timerId() == self.timer.timerId():
@@ -241,7 +233,7 @@ class App(QWidget):
                     self.nodeCheck = True
                     if(self.x == self.foodx and self.y == self.foody):  # snake head is at food
                         self.onEat()
-                if(len(self.lastMove) != 0):    # update body
+                if(len(self.lastMove) != 0):    # check if move has completed
                     if(self.lastMove[0] == 'LEFT'):
                         if(self.x == (self.tempx - self.bodyLength)):
                             if(len(self.lastMove) != 0):
