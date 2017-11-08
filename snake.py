@@ -53,6 +53,24 @@ class App(QWidget):
             self.b32 = QPushButton('b32', self)
             self.b33 = QPushButton('b33', self)
 
+            self.buttonGroup = QButtonGroup(self)
+            self.buttonGroup.addButton(self.b00)
+            self.buttonGroup.addButton(self.b01)
+            self.buttonGroup.addButton(self.b02)
+            self.buttonGroup.addButton(self.b03)
+            self.buttonGroup.addButton(self.b10)
+            self.buttonGroup.addButton(self.b11)
+            self.buttonGroup.addButton(self.b12)
+            self.buttonGroup.addButton(self.b13)
+            self.buttonGroup.addButton(self.b20)
+            self.buttonGroup.addButton(self.b21)
+            self.buttonGroup.addButton(self.b22)
+            self.buttonGroup.addButton(self.b23)
+            self.buttonGroup.addButton(self.b30)
+            self.buttonGroup.addButton(self.b31)
+            self.buttonGroup.addButton(self.b32)
+            self.buttonGroup.addButton(self.b33)
+
             self.startButton.move(10,10)
             self.resetButton.move(10,50)
             self.b00.move(300,50)
@@ -72,58 +90,18 @@ class App(QWidget):
             self.b32.move(500,350)
             self.b33.move(600,350)
 
-            self.b00.resize(25,25)
-            self.b01.resize(25,25)
-            self.b02.resize(25,25)
-            self.b03.resize(25,25)
-            self.b10.resize(25,25)
-            self.b11.resize(25,25)
-            self.b12.resize(25,25)
-            self.b13.resize(25,25)
-            self.b20.resize(25,25)
-            self.b21.resize(25,25)
-            self.b22.resize(25,25)
-            self.b23.resize(25,25)
-            self.b30.resize(25,25)
-            self.b31.resize(25,25)
-            self.b32.resize(25,25)
-            self.b33.resize(25,25)
+            for button in self.buttonGroup.buttons():
+                button.resize(25,25)
+                button.clicked.connect(self.on_click)
+                button.setStyleSheet('background-color: white; color: white}')
+
+            self.b11.setStyleSheet('background-color: green; color: green}')
+            self.b12.setStyleSheet('background-color: green; color: green}')
 
             self.startButton.clicked.connect(self.on_click)
             self.resetButton.clicked.connect(self.on_click)
-            self.b00.clicked.connect(self.on_click)
-            self.b01.clicked.connect(self.on_click)
-            self.b02.clicked.connect(self.on_click)
-            self.b03.clicked.connect(self.on_click)
-            self.b10.clicked.connect(self.on_click)
-            self.b11.clicked.connect(self.on_click)
-            self.b12.clicked.connect(self.on_click)
-            self.b13.clicked.connect(self.on_click)
-            self.b20.clicked.connect(self.on_click)
-            self.b21.clicked.connect(self.on_click)
-            self.b22.clicked.connect(self.on_click)
-            self.b23.clicked.connect(self.on_click)
-            self.b30.clicked.connect(self.on_click)
-            self.b31.clicked.connect(self.on_click)
-            self.b32.clicked.connect(self.on_click)
-            self.b33.clicked.connect(self.on_click)
 
-        self.b00.setStyleSheet('background-color: white; color: white}')
-        self.b01.setStyleSheet('background-color: white; color: white}')
-        self.b02.setStyleSheet('background-color: white; color: white}')
-        self.b03.setStyleSheet('background-color: white; color: white}')
-        self.b10.setStyleSheet('background-color: white; color: white}')
-        self.b11.setStyleSheet('background-color: white; color: white}')
-        self.b12.setStyleSheet('background-color: white; color: white}')
-        self.b13.setStyleSheet('background-color: white; color: white}')
-        self.b20.setStyleSheet('background-color: white; color: white}')
-        self.b21.setStyleSheet('background-color: white; color: white}')
-        self.b22.setStyleSheet('background-color: white; color: white}')
-        self.b23.setStyleSheet('background-color: white; color: white}')
-        self.b30.setStyleSheet('background-color: white; color: white}')
-        self.b31.setStyleSheet('background-color: white; color: white}')
-        self.b32.setStyleSheet('background-color: white; color: white}')
-        self.b33.setStyleSheet('background-color: white; color: white}')
+        #for button in self.buttonGroup.buttons():
 
     def initStats(self):
         if(self.isReset == False):
@@ -134,6 +112,7 @@ class App(QWidget):
             self.status.move(300, 10)
             self.status.resize(300, 30)
             self.status.setEnabled(False)
+            self.status.setStyleSheet('background-color: white; color: black}')
 
         self.status.setText("Press Start to Play")
         self.stats.setText("stats")
@@ -157,6 +136,8 @@ class App(QWidget):
         self.isStart = False
         self.isFood = False
         self.isReset = False
+        self.isEat = False
+        self.bodyLength = 100
         
         self.initButtons()
         self.initStats()
@@ -179,6 +160,8 @@ class App(QWidget):
         self.isStart = False
         self.isFood = False
         self.isReset = True
+        self.isEat = False
+        self.bodyLength = 100
 
         self.initButtons()
         self.initStats()
@@ -202,7 +185,6 @@ class App(QWidget):
         qp.begin(self)
         self.drawSnake(qp)
 
-
     def movement(self, move):
         self.snakeArray.pop()
         if(move[0] == "UP"):
@@ -224,23 +206,44 @@ class App(QWidget):
 
     def drawSnake(self, qp):
         qp.setPen(Qt.NoPen)
-        qp.setBrush(QColor(Qt.green))
+        #qp.setBrush(QColor(Qt.green))
+        qp.setBrush(QColor(Qt.darkGreen))
         for i in self.snakeArray:
             qp.drawRect(i[0], i[1], 25, 25)
 
+    def checkOverlap(self):
+        for button in self.buttonGroup.buttons():
+            self.isOverlap = False
+            print(len(self.snakeArray))
+            for node in self.snakeArray:
+                if(button.x() == node[0] and button.y() == node[1]):
+                    button.setStyleSheet('background-color: green; color: green}')
+                    self.isOverlap = True
+                    button.setEnabled = False
+            if(self.isOverlap == False and (button.x() != self.foodx or button.y() != self.foody)):
+                button.setStyleSheet('background-color: white; color: white}')
+                button.setEnabled = True
+
+    def onEat(self):
+        self.status.setText("Food was eaten")
+        self.isPaused = True
+        self.isFood = False
+
     def timerEvent(self, event):
         if event.timerId() == self.timer.timerId():
-            if(self.isFood == False):
+            if(self.isFood == False):   # wait for food
                 self.status.setText("Place food at an intersection")
             if(self.isPaused == False):
                 self.status.setText("Game is in play")
-                if(self.nodeCheck == False):
+                if(self.nodeCheck == False):    # head at a button
                     self.tempx = self.x
                     self.tempy = self.y
                     self.nodeCheck = True
-                if(len(self.lastMove) != 0):
+                    if(self.x == self.foodx and self.y == self.foody):  # snake head is at food
+                        self.onEat()
+                if(len(self.lastMove) != 0):    # update body
                     if(self.lastMove[0] == 'LEFT'):
-                        if(self.x == (self.tempx - 100)):
+                        if(self.x == (self.tempx - self.bodyLength)):
                             if(len(self.lastMove) != 0):
                                 self.lastMove.pop(0)
                                 self.nodeCheck = False
@@ -248,7 +251,7 @@ class App(QWidget):
                             self.movement(self.lastMove)
                             self.repaint()
                     elif(self.lastMove[0] == 'RIGHT'):
-                        if(self.x == (self.tempx + 100)):
+                        if(self.x == (self.tempx + self.bodyLength)):
                             if(len(self.lastMove) != 0):
                                 self.lastMove.pop(0)
                                 self.nodeCheck = False
@@ -256,7 +259,7 @@ class App(QWidget):
                             self.movement(self.lastMove)
                             self.repaint()
                     elif(self.lastMove[0] == 'UP'):
-                        if(self.y == (self.tempy - 100)):
+                        if(self.y == (self.tempy - self.bodyLength)):
                             if(len(self.lastMove) != 0):
                                 self.lastMove.pop(0)
                                 self.nodeCheck = False
@@ -264,13 +267,14 @@ class App(QWidget):
                             self.movement(self.lastMove)
                             self.repaint()
                     elif(self.lastMove[0] == 'DOWN'):
-                        if(self.y == (self.tempy + 100)):
+                        if(self.y == (self.tempy + self.bodyLength)):
                             if(len(self.lastMove) != 0):
                                 self.lastMove.pop(0)
                                 self.nodeCheck = False
                         else:
                             self.movement(self.lastMove)
                             self.repaint()
+                    self.checkOverlap()
         else:
             QFrame.timerEvent(self, event)
     
@@ -288,103 +292,110 @@ class App(QWidget):
             self.handler.uiData = 'R'
             self.handler.isUIData = True
             self.resetUI()
+            
         if(self.isStart == True and self.isFood == False) and self.isPaused == True:
             if self.sender().text() == 'b00':
                 self.handler.uiData = '00'
-                self.handler.isUIData = True
+                self.setButtonData()
                 self.b00.setStyleSheet('background-color: red; color: red}')
-                self.isFood = True
-                self.isPaused = False
+                self.foodx = 300
+                self.foody = 50
             elif self.sender().text() == 'b01':
                 self.handler.uiData = '01'
-                self.handler.isUIData = True
+                self.setButtonData()
                 self.b01.setStyleSheet('background-color: red; color: red}')
-                self.isFood = True
-                self.isPaused = False
+                self.foodx = 400
+                self.foody = 50
             elif self.sender().text() == 'b02':
                 self.handler.uiData = '02'
-                self.handler.isUIData = True
+                self.setButtonData()
                 self.b02.setStyleSheet('background-color: red; color: red}')
-                self.isFood = True
-                self.isPaused = False
+                self.foodx = 500
+                self.foody = 50
             elif self.sender().text() == 'b03':
                 self.handler.uiData = '03'
-                self.handler.isUIData = True
+                self.setButtonData()
                 self.b03.setStyleSheet('background-color: red; color: red}')
-                self.isFood = True
-                self.isPaused = False
+                self.foodx = 600
+                self.foody = 50
             elif self.sender().text() == 'b10':
                 self.handler.uiData = '10'
-                self.handler.isUIData = True
+                self.setButtonData()
                 self.b10.setStyleSheet('background-color: red; color: red}')
-                self.isFood = True
-                self.isPaused = False
+                self.foodx = 300
+                self.foody = 150
             elif self.sender().text() == 'b11':
                 self.handler.uiData = '11'
-                self.handler.isUIData = True
+                self.setButtonData()
                 self.b11.setStyleSheet('background-color: red; color: red}')
-                self.isFood = True
-                self.isPaused = False
+                self.foodx = 400
+                self.foody = 150
             elif self.sender().text() == 'b12':
                 self.handler.uiData = '12'
-                self.handler.isUIData = True
+                self.setButtonData()
                 self.b12.setStyleSheet('background-color: red; color: red}')
-                self.isFood = True
-                self.isPaused = False
+                self.foodx = 500
+                self.foody = 150
             elif self.sender().text() == 'b13':
                 self.handler.uiData = '13'
-                self.handler.isUIData = True
+                self.setButtonData()
                 self.b13.setStyleSheet('background-color: red; color: red}')
-                self.isFood = True
-                self.isPaused = False
+                self.foodx = 600
+                self.foody = 150
             elif self.sender().text() == 'b20':
                 self.handler.uiData = '20'
-                self.handler.isUIData = True
+                self.setButtonData()
                 self.b20.setStyleSheet('background-color: red; color: red}')
-                self.isFood = True
-                self.isPaused = False
+                self.setButtonData()
+                self.foodx = 300
+                self.foody = 250
             elif self.sender().text() == 'b21':
                 self.handler.uiData = '21'
-                self.handler.isUIData = True
+                self.setButtonData()
                 self.b21.setStyleSheet('background-color: red; color: red}')
-                self.isFood = True
-                self.isPaused = False
+                self.foodx = 400
+                self.foody = 250
             elif self.sender().text() == 'b22':
                 self.handler.uiData = '22'
-                self.handler.isUIData = True
+                self.setButtonData()
                 self.b22.setStyleSheet('background-color: red; color: red}')
-                self.isFood = True
-                self.isPaused = False
+                self.foodx = 500
+                self.foody = 250
             elif self.sender().text() == 'b23':
                 self.handler.uiData = '23'
-                self.handler.isUIData = True
+                self.setButtonData()
                 self.b23.setStyleSheet('background-color: red; color: red}')
-                self.isFood = True
-                self.isPaused = False
+                self.foodx = 600
+                self.foody = 250
             elif self.sender().text() == 'b30':
                 self.handler.uiData = '30'
-                self.handler.isUIData = True
+                self.setButtonData()
                 self.b30.setStyleSheet('background-color: red; color: red}')
-                self.isFood = True
-                self.isPaused = False
+                self.foodx = 300
+                self.foody = 350
             elif self.sender().text() == 'b31':
                 self.handler.uiData = '31'
-                self.handler.isUIData = True
+                self.setButtonData()
                 self.b31.setStyleSheet('background-color: red; color: red}')
-                self.isFood = True
-                self.isPaused = False
+                self.foodx = 400
+                self.foody = 350
             elif self.sender().text() == 'b32':
                 self.handler.uiData = '32'
-                self.handler.isUIData = True
+                self.setButtonData()
                 self.b32.setStyleSheet('background-color: red; color: red}')
-                self.isFood = True
-                self.isPaused = False
+                self.foodx = 500
+                self.foody = 350
             elif self.sender().text() == 'b33':
                 self.handler.uiData = '33'
-                self.handler.isUIData = True
+                self.setButtonData()
                 self.b33.setStyleSheet('background-color: red; color: red}')
-                self.isFood = True
-                self.isPaused = False
+                self.foodx = 600
+                self.foody = 350
+
+    def setButtonData(self):
+        self.handler.isUIData = True
+        self.isFood = True
+        self.isPaused = False
                 
     @pyqtSlot(str)
     def dataReceive(self, letter):
