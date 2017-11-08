@@ -98,8 +98,11 @@ class App(QWidget):
                 
         for button in self.buttonGroup.buttons():
             button.setStyleSheet('background-color: white; color: white}')
+            button.setEnabled(True)
         self.b11.setStyleSheet('background-color: green; color: green}')
         self.b12.setStyleSheet('background-color: green; color: green}')
+        self.b11.setEnabled(False)
+        self.b12.setEnabled(False)
 
     def initStats(self):
         if(self.isReset == False):
@@ -110,10 +113,12 @@ class App(QWidget):
             self.status.move(300, 10)
             self.status.resize(300, 30)
             self.status.setEnabled(False)
+            self.stats.setEnabled(False)
             self.status.setStyleSheet('background-color: white; color: black}')
+            self.stats.setStyleSheet('background-color: white; color: black}')
 
         self.status.setText("Press Start to Play")
-        self.stats.setText("stats")
+        self.stats.setText("Food Eaten: 0")
  
     def initUI(self):
         self.setWindowTitle('Snake Team1')
@@ -208,10 +213,10 @@ class App(QWidget):
                 if(button.x() == node[0] and button.y() == node[1]):
                     button.setStyleSheet('background-color: green; color: green}')
                     self.isOverlap = True
-                    button.setEnabled = False
+                    button.setEnabled(False)
             if(self.isOverlap == False and (button.x() != self.foodx or button.y() != self.foody)):
                 button.setStyleSheet('background-color: white; color: white}')
-                button.setEnabled = True
+                button.setEnabled(True)
 
     def onEat(self):
         self.status.setText("Food was eaten")
@@ -219,7 +224,8 @@ class App(QWidget):
         self.isFood = False
         self.isGrow = True
         self.count = 0
-        #self.snakeArray.append([self.x + 125, self.y])
+        self.foodEaten += 1
+        self.stats.setText("Food Eaten: " + str(self.foodEaten))
 
     def timerEvent(self, event):
         if event.timerId() == self.timer.timerId():
@@ -391,7 +397,7 @@ class App(QWidget):
                 
     @pyqtSlot(str)
     def dataReceive(self, letter):
-        self.stats.setText(letter)
+        #self.stats.setText(letter)
         if(letter == 'l'):
             self.lastMove.append('LEFT')
         elif(letter == 'u'):
