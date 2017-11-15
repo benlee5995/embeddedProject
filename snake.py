@@ -4,6 +4,7 @@ from communications import ComHandler
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+from astar import *
 
 class App(QWidget):
     
@@ -131,7 +132,7 @@ class App(QWidget):
     def resetUI(self):
         self.x = 400
         self.y = 150
-        self.lastMove = ['LEFT', 'UP']
+        self.lastMove = []
         self.timer = QBasicTimer()
         self.bodyLength = 100
         self.foodEaten = 0
@@ -151,6 +152,8 @@ class App(QWidget):
         self.isFood = False
         self.isEat = False
         self.isGrow = False
+        self.prev = ['LEFT']
+        self.win = False
 
         self.initButtons()
         self.initStats()
@@ -208,7 +211,6 @@ class App(QWidget):
     def checkOverlap(self):
         for button in self.buttonGroup.buttons():
             self.isOverlap = False
-            print(len(self.snakeArray))
             for node in self.snakeArray:
                 if(button.x() == node[0] and button.y() == node[1]):
                     button.setStyleSheet('background-color: green; color: green}')
@@ -225,11 +227,18 @@ class App(QWidget):
         self.isGrow = True
         self.count = 0
         self.foodEaten += 1
-        self.stats.setText("Food Eaten: " + str(self.foodEaten))
+        if(self.foodEaten >=15):
+            self.stats.setText("Food Eaten: " + str(self.foodEaten))
+            self.status.setText("Game Won! Press Reset to Play Again")
+            self.isPaused = True
+            self.win = True
+        else:
+            self.stats.setText("Food Eaten: " + str(self.foodEaten))
+
 
     def timerEvent(self, event):
         if event.timerId() == self.timer.timerId():
-            if(self.isFood == False):   # wait for food
+            if(self.isFood == False and self.win == False):   # wait for food
                 self.status.setText("Place food at an intersection")
             if(self.isPaused == False):
                 self.status.setText("Game is in play")
@@ -240,6 +249,9 @@ class App(QWidget):
                     if(self.x == self.foodx and self.y == self.foody):  # snake head is at food
                         self.onEat()
                 if(len(self.lastMove) != 0):    # check if move has completed
+                    if(len(self.lastMove) == 1):
+                        self.prev = self.lastMove[0]
+                        print(self.prev)
                     if(self.lastMove[0] == 'LEFT'):
                         if(self.x == (self.tempx - self.bodyLength)):
                             if(len(self.lastMove) != 0):
@@ -272,6 +284,13 @@ class App(QWidget):
                         else:
                             self.movement(self.lastMove)
                             self.repaint()
+                    elif(self.lastMove[0] == 'P'):
+                        print("LOSE")
+                        self.status.setText("You Lose! Press Reset to Play Again")
+                        self.isPaused = True
+                        for button in self.buttonGroup.buttons():
+                            button.setEnabled(False)
+
                     self.checkOverlap()
         else:
             QFrame.timerEvent(self, event)
@@ -298,48 +317,56 @@ class App(QWidget):
                 self.b00.setStyleSheet('background-color: red; color: red}')
                 self.foodx = 300
                 self.foody = 50
+                self.lastMove = self.getDirections(self.snakeArray, self.foodEaten, (0,0), self.prev)
             elif self.sender().text() == 'b01':
                 self.handler.uiData = '01'
                 self.setButtonData()
                 self.b01.setStyleSheet('background-color: red; color: red}')
                 self.foodx = 400
                 self.foody = 50
+                self.lastMove = self.getDirections(self.snakeArray, self.foodEaten, (0,1), self.prev)
             elif self.sender().text() == 'b02':
                 self.handler.uiData = '02'
                 self.setButtonData()
                 self.b02.setStyleSheet('background-color: red; color: red}')
                 self.foodx = 500
                 self.foody = 50
+                self.lastMove = self.getDirections(self.snakeArray, self.foodEaten, (0,2), self.prev)
             elif self.sender().text() == 'b03':
                 self.handler.uiData = '03'
                 self.setButtonData()
                 self.b03.setStyleSheet('background-color: red; color: red}')
                 self.foodx = 600
                 self.foody = 50
+                self.lastMove = self.getDirections(self.snakeArray, self.foodEaten, (0,3), self.prev)
             elif self.sender().text() == 'b10':
                 self.handler.uiData = '10'
                 self.setButtonData()
                 self.b10.setStyleSheet('background-color: red; color: red}')
                 self.foodx = 300
                 self.foody = 150
+                self.lastMove = self.getDirections(self.snakeArray, self.foodEaten, (1,0), self.prev)
             elif self.sender().text() == 'b11':
                 self.handler.uiData = '11'
                 self.setButtonData()
                 self.b11.setStyleSheet('background-color: red; color: red}')
                 self.foodx = 400
                 self.foody = 150
+                self.lastMove = self.getDirections(self.snakeArray, self.foodEaten, (1,1), self.prev)
             elif self.sender().text() == 'b12':
                 self.handler.uiData = '12'
                 self.setButtonData()
                 self.b12.setStyleSheet('background-color: red; color: red}')
                 self.foodx = 500
                 self.foody = 150
+                self.lastMove = self.getDirections(self.snakeArray, self.foodEaten, (1,2), self.prev)
             elif self.sender().text() == 'b13':
                 self.handler.uiData = '13'
                 self.setButtonData()
                 self.b13.setStyleSheet('background-color: red; color: red}')
                 self.foodx = 600
                 self.foody = 150
+                self.lastMove = self.getDirections(self.snakeArray, self.foodEaten, (1,3), self.prev)
             elif self.sender().text() == 'b20':
                 self.handler.uiData = '20'
                 self.setButtonData()
@@ -347,48 +374,56 @@ class App(QWidget):
                 self.setButtonData()
                 self.foodx = 300
                 self.foody = 250
+                self.lastMove = self.getDirections(self.snakeArray, self.foodEaten, (2,0), self.prev)
             elif self.sender().text() == 'b21':
                 self.handler.uiData = '21'
                 self.setButtonData()
                 self.b21.setStyleSheet('background-color: red; color: red}')
                 self.foodx = 400
                 self.foody = 250
+                self.lastMove = self.getDirections(self.snakeArray, self.foodEaten, (2,1), self.prev)
             elif self.sender().text() == 'b22':
                 self.handler.uiData = '22'
                 self.setButtonData()
                 self.b22.setStyleSheet('background-color: red; color: red}')
                 self.foodx = 500
                 self.foody = 250
+                self.lastMove = self.getDirections(self.snakeArray, self.foodEaten, (2,2), self.prev)
             elif self.sender().text() == 'b23':
                 self.handler.uiData = '23'
                 self.setButtonData()
                 self.b23.setStyleSheet('background-color: red; color: red}')
                 self.foodx = 600
                 self.foody = 250
+                self.lastMove = self.getDirections(self.snakeArray, self.foodEaten, (2,3), self.prev)
             elif self.sender().text() == 'b30':
                 self.handler.uiData = '30'
                 self.setButtonData()
                 self.b30.setStyleSheet('background-color: red; color: red}')
                 self.foodx = 300
                 self.foody = 350
+                self.lastMove = self.getDirections(self.snakeArray, self.foodEaten, (3,0), self.prev)
             elif self.sender().text() == 'b31':
                 self.handler.uiData = '31'
                 self.setButtonData()
                 self.b31.setStyleSheet('background-color: red; color: red}')
                 self.foodx = 400
                 self.foody = 350
+                self.lastMove = self.getDirections(self.snakeArray, self.foodEaten, (3,1), self.prev)
             elif self.sender().text() == 'b32':
                 self.handler.uiData = '32'
                 self.setButtonData()
                 self.b32.setStyleSheet('background-color: red; color: red}')
                 self.foodx = 500
                 self.foody = 350
+                self.lastMove = self.getDirections(self.snakeArray, self.foodEaten, (3,2), self.prev)
             elif self.sender().text() == 'b33':
                 self.handler.uiData = '33'
                 self.setButtonData()
                 self.b33.setStyleSheet('background-color: red; color: red}')
                 self.foodx = 600
                 self.foody = 350
+                self.lastMove = self.getDirections(self.snakeArray, self.foodEaten, (3,3), self.prev)
 
     def setButtonData(self):
         self.handler.isUIData = True
@@ -408,6 +443,22 @@ class App(QWidget):
             self.lastMove.append('RIGHT')
         elif(letter == 'p'):
             self.isPaused = True
+
+    def getDirections(self, snakeArray, size, dest, prev):
+        arr = []
+        for i in range(0, len(snakeArray), 4):
+            to_go = (  int((snakeArray[i][1] - 50) / 100 ) , int((snakeArray[i][0] / 100) - 3)   )
+            arr.append(to_go)
+
+        ac_size = size+2
+
+        dArr = getDir(arr, ac_size, dest, prev)
+
+        #send dArr[1] to Josh
+
+        return dArr[0]
+
+
         
 if __name__ == '__main__':
     app = QApplication(sys.argv)
